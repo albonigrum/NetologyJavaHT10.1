@@ -20,22 +20,22 @@ class RadioTest {
     @CsvFileSource(resources = "/data_for_tests.csv")
     void shouldSetAndGetRadiostationNumber(int countRadiostations) {
         Radio radio = new Radio(countRadiostations);
-        assertEquals(0, radio.getRadioStationNumber());
+        assertEquals(0, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(0);
-        assertEquals(0, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(0);
+        assertEquals(0, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(countRadiostations / 2);
-        assertEquals(countRadiostations / 2, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(countRadiostations / 2);
+        assertEquals(countRadiostations / 2, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(countRadiostations - 1);
-        assertEquals(countRadiostations - 1, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(countRadiostations - 1);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(countRadiostations);
-        assertEquals(countRadiostations - 1, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(countRadiostations);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(-1);
-        assertEquals(countRadiostations - 1, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(-1);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
     }
 
     @ParameterizedTest
@@ -43,13 +43,13 @@ class RadioTest {
     void shouldNextRadioStation(int countRadiostations) {
         Radio radio = new Radio(countRadiostations);
 
-        radio.setRadioStationNumber(0);
+        radio.setRadiostationNumber(0);
 
         for (int i = 0; i < countRadiostations; ++i) {
-            assertEquals(i, radio.getRadioStationNumber());
+            assertEquals(i, radio.getRadiostationNumber());
             radio.nextRadioStation();
         }
-        assertEquals(0, radio.getRadioStationNumber());
+        assertEquals(0, radio.getRadiostationNumber());
     }
 
     @ParameterizedTest
@@ -57,13 +57,13 @@ class RadioTest {
     void shouldPrevRadioStation(int countRadiostations) {
         Radio radio = new Radio(countRadiostations);
 
-        radio.setRadioStationNumber(0);
+        radio.setRadiostationNumber(0);
 
         for (int i = 0, j = 0; j < countRadiostations; i = (countRadiostations - 1 + i) % countRadiostations, ++j) {
-            assertEquals(i, radio.getRadioStationNumber());
+            assertEquals(i, radio.getRadiostationNumber());
             radio.prevRadioStation();
         }
-        assertEquals(0, radio.getRadioStationNumber());
+        assertEquals(0, radio.getRadiostationNumber());
     }
 
     @ParameterizedTest
