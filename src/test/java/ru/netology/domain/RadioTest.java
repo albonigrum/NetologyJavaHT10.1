@@ -1,74 +1,83 @@
 package ru.netology.domain;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RadioTest {
 
     @Test
-    void shouldSetAndGetRadioStationNumber() {
-        Radio radio = new Radio();
-        assertEquals(0, radio.getRadioStationNumber());
-
-        radio.setRadioStationNumber(0);
-        assertEquals(0, radio.getRadioStationNumber());
-
-        radio.setRadioStationNumber(5);
-        assertEquals(5, radio.getRadioStationNumber());
-
-        radio.setRadioStationNumber(9);
-        assertEquals(9, radio.getRadioStationNumber());
-
-        radio.setRadioStationNumber(11);
-        assertEquals(9, radio.getRadioStationNumber());
-
-        radio.setRadioStationNumber(-1);
-        assertEquals(9, radio.getRadioStationNumber());
+    void shouldCreateRadio() {
+        Radio radioNoArg = new Radio();
+        assertEquals(10, radioNoArg.getCountRadiostations());
+        Radio radioOneArg = new Radio(100);
+        assertEquals(100, radioOneArg.getCountRadiostations());
     }
 
-    @Test
-    void shouldNextRadioStation() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data_for_tests.csv")
+    void shouldSetAndGetRadiostationNumber(int countRadiostations) {
+        Radio radio = new Radio(countRadiostations);
+        assertEquals(0, radio.getRadiostationNumber());
 
-        int [] possibleOptions = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        radio.setRadiostationNumber(0);
+        assertEquals(0, radio.getRadiostationNumber());
 
-        radio.setRadioStationNumber(possibleOptions[0]);
+        radio.setRadiostationNumber(countRadiostations / 2);
+        assertEquals(countRadiostations / 2, radio.getRadiostationNumber());
 
-        for (int possibleOption : possibleOptions) {
-            assertEquals(possibleOption, radio.getRadioStationNumber());
+        radio.setRadiostationNumber(countRadiostations - 1);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
+
+        radio.setRadiostationNumber(countRadiostations);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
+
+        radio.setRadiostationNumber(-1);
+        assertEquals(countRadiostations - 1, radio.getRadiostationNumber());
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data_for_tests.csv")
+    void shouldNextRadioStation(int countRadiostations) {
+        Radio radio = new Radio(countRadiostations);
+
+        radio.setRadiostationNumber(0);
+
+        for (int i = 0; i < countRadiostations; ++i) {
+            assertEquals(i, radio.getRadiostationNumber());
             radio.nextRadioStation();
         }
-        assertEquals(possibleOptions[0], radio.getRadioStationNumber());
-
+        assertEquals(0, radio.getRadiostationNumber());
     }
 
-    @Test
-    void shouldPrevRadioStation() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data_for_tests.csv")
+    void shouldPrevRadioStation(int countRadiostations) {
+        Radio radio = new Radio(countRadiostations);
 
-        int [] possibleOptions = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+        radio.setRadiostationNumber(0);
 
-        radio.setRadioStationNumber(possibleOptions[0]);
-
-        for (int possibleOption : possibleOptions) {
-            assertEquals(possibleOption, radio.getRadioStationNumber());
+        for (int i = 0, j = 0; j < countRadiostations; i = (countRadiostations - 1 + i) % countRadiostations, ++j) {
+            assertEquals(i, radio.getRadiostationNumber());
             radio.prevRadioStation();
         }
-        assertEquals(possibleOptions[0], radio.getRadioStationNumber());
+        assertEquals(0, radio.getRadiostationNumber());
     }
 
-    @Test
-    void increaseAndDecreaseVolume() {
-        Radio radio = new Radio();
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data_for_tests.csv")
+    void increaseAndDecreaseVolume(int countRadiostations) {
+        Radio radio = new Radio(countRadiostations);
 
-        for (int expectedVolume = 0; expectedVolume <= 10; ++expectedVolume){
+        for (int expectedVolume = 0; expectedVolume <= radio.VOLUME_MAX; ++expectedVolume){
             assertEquals(expectedVolume, radio.getVolume());
             radio.increaseVolume();
         }
-        assertEquals(10, radio.getVolume());
+        assertEquals(radio.VOLUME_MAX, radio.getVolume());
 
-        for (int expectedVolume = 10; expectedVolume >= 0; --expectedVolume){
+        for (int expectedVolume = radio.VOLUME_MAX; expectedVolume >= 0; --expectedVolume){
             assertEquals(expectedVolume, radio.getVolume());
             radio.decreaseVolume();
         }
